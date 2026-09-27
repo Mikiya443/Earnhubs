@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard — <%= siteName %></title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <%- include('partials/nav') %>
+  <div class="container">
+    <%- include('partials/flash') %>
+    <div class="grid grid-3">
+      <div class="card stat">
+        <div class="num">₦<%= user.balance.toFixed(2) %></div>
+        <div class="label">Current balance</div>
+      </div>
+      <div class="card stat">
+        <div class="num">₦<%= checkinReward %></div>
+        <div class="label">Daily check-in reward</div>
+      </div>
+      <div class="card stat">
+        <div class="num">₦<%= referralBonus %></div>
+        <div class="label">Per referral bonus</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Daily check-in</h3>
+      <% if (checkedInToday) { %>
+        <p style="color:var(--muted);">You've already checked in today. Come back tomorrow!</p>
+      <% } else { %>
+        <form action="/checkin" method="POST">
+          <button class="btn" type="submit">Check in and earn ₦<%= checkinReward %></button>
+        </form>
+      <% } %>
+    </div>
+
+    <div class="grid grid-2">
+      <a href="/offers" class="card" style="text-decoration:none;">
+        <h3 style="margin:0 0 6px;">🎯 Browse Offers</h3>
+        <p style="color:var(--muted); margin:0; font-size:0.9rem;">Complete tasks, surveys and videos.</p>
+      </a>
+      <a href="/referrals" class="card" style="text-decoration:none;">
+        <h3 style="margin:0 0 6px;">👥 Invite Friends</h3>
+        <p style="color:var(--muted); margin:0; font-size:0.9rem;">Share your referral link and earn.</p>
+      </a>
+    </div>
+
+    <div class="card">
+      <h3>Recent activity</h3>
+      <% if (recentTx.length === 0) { %>
+        <p style="color:var(--muted);">No activity yet.</p>
+      <% } else { %>
+        <table>
+          <thead><tr><th>Date</th><th>Reason</th><th>Amount</th></tr></thead>
+          <tbody>
+            <% recentTx.forEach(tx => { %>
+              <tr>
+                <td><%= new Date(tx.created_at).toLocaleDateString() %></td>
+                <td><%= tx.reason %></td>
+                <td style="color: <%= tx.type === 'credit' ? 'var(--accent)' : 'var(--danger)' %>;">
+                  <%= tx.type === 'credit' ? '+' : '-' %>₦<%= tx.amount.toFixed(2) %>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      <% } %>
+    </div>
+  </div>
+</body>
+</html>

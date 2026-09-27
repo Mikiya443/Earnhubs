@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin — <%= siteName %></title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <%- include('../partials/nav') %>
+  <div class="admin-layout">
+    <% var active = 'dashboard' %>
+    <%- include('../partials/admin-sidebar', { active }) %>
+    <div class="admin-main">
+      <%- include('../partials/flash') %>
+      <h2>Overview</h2>
+      <div class="grid grid-3">
+        <div class="card stat"><div class="num"><%= stats.totalUsers %></div><div class="label">Total users</div></div>
+        <div class="card stat"><div class="num">₦<%= stats.totalPaidOut.toFixed(2) %></div><div class="label">Total paid out</div></div>
+        <div class="card stat"><div class="num"><%= stats.pendingWithdrawals %></div><div class="label">Pending withdrawals</div></div>
+        <div class="card stat"><div class="num"><%= stats.pendingCompletions %></div><div class="label">Pending approvals</div></div>
+        <div class="card stat"><div class="num"><%= stats.totalOffers %></div><div class="label">Active offers</div></div>
+      </div>
+
+      <div class="card">
+        <h3>Newest users</h3>
+        <table>
+          <thead><tr><th>Name</th><th>Email</th><th>Balance</th><th>Joined</th></tr></thead>
+          <tbody>
+            <% recentUsers.forEach(u => { %>
+              <tr>
+                <td><%= u.name %></td>
+                <td><%= u.email %></td>
+                <td>₦<%= u.balance.toFixed(2) %></td>
+                <td><%= new Date(u.created_at).toLocaleDateString() %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Offers — Admin</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <%- include('../partials/nav') %>
+  <div class="admin-layout">
+    <% var active = 'offers' %>
+    <%- include('../partials/admin-sidebar', { active }) %>
+    <div class="admin-main">
+      <%- include('../partials/flash') %>
+      <h2>Manage offers</h2>
+
+      <div class="card">
+        <h3>Add new offer</h3>
+        <form action="/admin/offers" method="POST" class="form-inline">
+          <div><label>Title</label><input type="text" name="title" required /></div>
+          <div><label>Type</label>
+            <select name="type">
+              <option value="offer">Offer</option>
+              <option value="survey">Survey</option>
+              <option value="video">Video</option>
+            </select>
+          </div>
+          <div><label>Reward (₦)</label><input type="number" name="reward" step="0.01" required /></div>
+          <div><label>Link (optional)</label><input type="text" name="link" placeholder="https://..." /></div>
+          <div style="flex:2;"><label>Description</label><input type="text" name="description" /></div>
+          <div><button class="btn" type="submit" style="width:100%;">Add</button></div>
+        </form>
+      </div>
+
+      <div class="card" style="overflow-x:auto;">
+        <table>
+          <thead><tr><th>Title</th><th>Type</th><th>Reward</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>
+            <% offers.forEach(o => { %>
+              <tr>
+                <td><%= o.title %></td>
+                <td><%= o.type %></td>
+                <td>₦<%= o.reward.toFixed(2) %></td>
+                <td><span class="pill <%= o.active ? 'pill-active' : 'pill-banned' %>"><%= o.active ? 'Active' : 'Disabled' %></span></td>
+                <td>
+                  <form action="/admin/offers/<%= o.id %>/toggle" method="POST" style="display:inline;">
+                    <button class="btn btn-secondary btn-sm" type="submit"><%= o.active ? 'Disable' : 'Enable' %></button>
+                  </form>
+                  <form action="/admin/offers/<%= o.id %>/delete" method="POST" style="display:inline;" onsubmit="return confirm('Delete this offer?');">
+                    <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Earn — <%= siteName %></title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <%- include('partials/nav') %>
+  <div class="container">
+    <%- include('partials/flash') %>
+    <h2>Available offers</h2>
+    <% if (offers.length === 0) { %>
+      <div class="card"><p style="color:var(--muted);">No offers available right now. Check back soon!</p></div>
+    <% } %>
+    <div class="grid grid-2">
+      <% offers.forEach(offer => { %>
+        <div class="card">
+          <div style="display:flex; justify-content:space-between; align-items:start;">
+            <h3 style="margin:0;"><%= offer.title %></h3>
+            <span class="pill pill-active"><%= offer.type %></span>
+          </div>
+          <p style="color:var(--muted); font-size:0.9rem;"><%= offer.description %></p>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <strong style="color:var(--accent); font-size:1.2rem;">₦<%= offer.reward.toFixed(2) %></strong>
+            <% if (completedIds.has(offer.id)) { %>
+              <span class="pill pill-approved">Completed</span>
+            <% } else { %>
+              <form action="/offers/<%= offer.id %>/complete" method="POST">
+                <% if (offer.link) { %>
+                  <a href="<%= offer.link %>" target="_blank" class="btn btn-secondary btn-sm" style="margin-right:6px;">Open</a>
+                <% } %>
+                <button class="btn btn-sm" type="submit">Mark complete</button>
+              </form>
+            <% } %>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</body>
+</html>

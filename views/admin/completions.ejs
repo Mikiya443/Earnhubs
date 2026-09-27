@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Approvals — Admin</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <%- include('../partials/nav') %>
+  <div class="admin-layout">
+    <% var active = 'completions' %>
+    <%- include('../partials/admin-sidebar', { active }) %>
+    <div class="admin-main">
+      <%- include('../partials/flash') %>
+      <h2>Pending approvals (<%= completions.length %>)</h2>
+      <% if (completions.length === 0) { %>
+        <div class="card"><p style="color:var(--muted);">Nothing to review right now.</p></div>
+      <% } %>
+      <div class="card" style="overflow-x:auto;">
+        <table>
+          <thead><tr><th>User</th><th>Offer</th><th>Reward</th><th>Submitted</th><th>Actions</th></tr></thead>
+          <tbody>
+            <% completions.forEach(c => { %>
+              <tr>
+                <td><%= c.user_name %><br/><span style="color:var(--muted); font-size:0.8rem;"><%= c.user_email %></span></td>
+                <td><%= c.offer_title %></td>
+                <td>₦<%= c.reward.toFixed(2) %></td>
+                <td><%= new Date(c.created_at).toLocaleString() %></td>
+                <td>
+                  <form action="/admin/completions/<%= c.id %>/approve" method="POST" style="display:inline;">
+                    <button class="btn btn-sm" type="submit">Approve & pay</button>
+                  </form>
+                  <form action="/admin/completions/<%= c.id %>/reject" method="POST" style="display:inline;">
+                    <button class="btn btn-danger btn-sm" type="submit">Reject</button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

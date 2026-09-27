@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Settings — Admin</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <%- include('../partials/nav') %>
+  <div class="admin-layout">
+    <% var active = 'settings' %>
+    <%- include('../partials/admin-sidebar', { active }) %>
+    <div class="admin-main">
+      <%- include('../partials/flash') %>
+      <h2>Site settings</h2>
+      <div class="card" style="max-width:480px;">
+        <form action="/admin/settings" method="POST">
+          <label>Site name</label>
+          <input type="text" name="site_name" value="<%= settings.site_name %>" />
+          <label>Daily check-in reward (₦)</label>
+          <input type="number" step="0.01" name="checkin_reward" value="<%= settings.checkin_reward %>" />
+          <label>Video watch reward (₦)</label>
+          <input type="number" step="0.01" name="video_reward" value="<%= settings.video_reward %>" />
+          <label>Referral bonus (₦)</label>
+          <input type="number" step="0.01" name="referral_bonus" value="<%= settings.referral_bonus %>" />
+          <label>Minimum withdrawal (₦)</label>
+          <input type="number" step="0.01" name="min_withdrawal" value="<%= settings.min_withdrawal %>" />
+          <button class="btn" type="submit">Save settings</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Withdraw — <%= siteName %></title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <%- include('partials/nav') %>
+  <div class="container">
+    <%- include('partials/flash') %>
+    <div class="card">
+      <h2>Request a withdrawal</h2>
+      <p style="color:var(--muted);">Available balance: <strong style="color:var(--accent);">₦<%= user.balance.toFixed(2) %></strong> · Minimum: ₦<%= minWithdrawal %></p>
+      <form action="/withdraw" method="POST">
+        <label>Amount (₦)</label>
+        <input type="number" name="amount" min="<%= minWithdrawal %>" step="0.01" required />
+        <label>Payout method</label>
+        <select name="method" id="method" required>
+          <option value="opay">OPay</option>
+          <option value="bank">Bank transfer</option>
+        </select>
+        <label>Account details</label>
+        <textarea name="account_details" rows="2" placeholder="OPay number, or Bank name + account number + account name" required></textarea>
+        <button class="btn" type="submit">Submit request</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h3>Withdrawal history</h3>
+      <% if (history.length === 0) { %>
+        <p style="color:var(--muted);">No withdrawal requests yet.</p>
+      <% } else { %>
+        <table>
+          <thead><tr><th>Date</th><th>Amount</th><th>Method</th><th>Status</th></tr></thead>
+          <tbody>
+            <% history.forEach(w => { %>
+              <tr>
+                <td><%= new Date(w.created_at).toLocaleDateString() %></td>
+                <td>₦<%= w.amount.toFixed(2) %></td>
+                <td><%= w.method.toUpperCase() %></td>
+                <td><span class="pill pill-<%= w.status %>"><%= w.status %></span></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      <% } %>
+    </div>
+  </div>
+</body>
+</html>

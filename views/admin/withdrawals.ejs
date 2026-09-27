@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Withdrawals — Admin</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <%- include('../partials/nav') %>
+  <div class="admin-layout">
+    <% var active = 'withdrawals' %>
+    <%- include('../partials/admin-sidebar', { active }) %>
+    <div class="admin-main">
+      <%- include('../partials/flash') %>
+      <h2>Withdrawal requests</h2>
+      <div class="card" style="overflow-x:auto;">
+        <table>
+          <thead><tr><th>User</th><th>Amount</th><th>Method</th><th>Details</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>
+            <% withdrawals.forEach(w => { %>
+              <tr>
+                <td><%= w.user_name %><br/><span style="color:var(--muted); font-size:0.8rem;"><%= w.user_email %></span></td>
+                <td>₦<%= w.amount.toFixed(2) %></td>
+                <td><%= w.method.toUpperCase() %></td>
+                <td style="max-width:220px; white-space:pre-wrap;"><%= w.account_details %></td>
+                <td><span class="pill pill-<%= w.status %>"><%= w.status %></span></td>
+                <td style="min-width:200px;">
+                  <% if (w.status === 'pending') { %>
+                    <form action="/admin/withdrawals/<%= w.id %>/approve" method="POST" style="display:inline;">
+                      <button class="btn btn-sm" type="submit">Approve</button>
+                    </form>
+                    <form action="/admin/withdrawals/<%= w.id %>/reject" method="POST" style="display:inline;">
+                      <button class="btn btn-danger btn-sm" type="submit">Reject</button>
+                    </form>
+                  <% } else if (w.status === 'approved') { %>
+                    <form action="/admin/withdrawals/<%= w.id %>/paid" method="POST" style="display:inline;">
+                      <button class="btn btn-sm" type="submit">Mark paid</button>
+                    </form>
+                  <% } %>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

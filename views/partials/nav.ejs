@@ -1,0 +1,25 @@
+<div class="nav">
+  <div class="nav-brand"><a href="/">💰 <%= siteName %></a></div>
+  <div class="nav-links">
+    <% if (isLoggedIn && role !== 'admin') { %>
+      <a href="/dashboard">Dashboard</a>
+      <a href="/offers">Earn</a>
+      <a href="/referrals">Referrals</a>
+      <a href="/withdraw">Withdraw</a>
+      <% if (typeof user !== 'undefined') { %>
+        <span class="badge-balance">₦<%= user.balance.toFixed(2) %></span>
+      <% } %>
+      <form action="/logout" method="POST" style="display:inline;margin:0;">
+        <button class="btn btn-secondary btn-sm" type="submit">Logout</button>
+      </form>
+    <% } else if (isLoggedIn && role === 'admin') { %>
+      <a href="/admin">Admin Panel</a>
+      <form action="/logout" method="POST" style="display:inline;margin:0;">
+        <button class="btn btn-secondary btn-sm" type="submit">Logout</button>
+      </form>
+    <% } else { %>
+      <a href="/login">Login</a>
+      <a href="/register" class="btn btn-sm">Sign up</a>
+    <% } %>
+  </div>
+</div>

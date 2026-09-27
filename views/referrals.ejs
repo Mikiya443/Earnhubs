@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Referrals — <%= siteName %></title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <%- include('partials/nav') %>
+  <div class="container">
+    <%- include('partials/flash') %>
+    <div class="card">
+      <h2>Your referral link</h2>
+      <p style="color:var(--muted);">Earn ₦<%= referralBonus %> for every friend who signs up with your link.</p>
+      <input type="text" readonly value="/register?ref=<%= user.referral_code %>" onclick="this.select()" />
+      <p style="color:var(--muted); font-size:0.85rem; margin-top:-6px;">Add your site's domain in front of this path when sharing.</p>
+      <p>Your code: <strong style="color:var(--accent);"><%= user.referral_code %></strong></p>
+    </div>
+    <div class="card">
+      <h3>People you've referred (<%= referredUsers.length %>)</h3>
+      <% if (referredUsers.length === 0) { %>
+        <p style="color:var(--muted);">No referrals yet. Share your link to start earning!</p>
+      <% } else { %>
+        <table>
+          <thead><tr><th>Name</th><th>Joined</th></tr></thead>
+          <tbody>
+            <% referredUsers.forEach(u => { %>
+              <tr><td><%= u.name %></td><td><%= new Date(u.created_at).toLocaleDateString() %></td></tr>
+            <% }) %>
+          </tbody>
+        </table>
+      <% } %>
+    </div>
+  </div>
+</body>
+</html>
